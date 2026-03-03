@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holi 2026 Royal Celebration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&family=Yatra+One&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    background: radial-gradient(circle at top left,#ff9933,#ff4e50,#ff0080,#00c9ff);
+    transition:0.5s;
+}
+
+body.dark{
+    background: radial-gradient(circle at top left,#1a1a2e,#16213e,#0f3460);
+}
+
+/* Subtle Mandala Overlay */
+body::before{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size:40px 40px;
+    z-index:0;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1;
+}
+
+.container{
+    position:relative;
+    z-index:3;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    perspective:1200px;
+    flex-direction:column;
+}
+
+.card{
+    width:420px;
+    height:420px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(25px);
+    border-radius:30px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:#fff8e7;
+    transform-style:preserve-3d;
+    transition:transform 0.2s ease;
+    box-shadow:0 40px 80px rgba(0,0,0,0.5);
+    padding:20px;
+    border:2px solid rgba(255,215,0,0.3);
+}
+
+.card h1{
+    font-family:'Yatra One',cursive;
+    font-size:42px;
+    color:gold;
+    text-shadow:0 0 20px rgba(255,215,0,0.7);
+}
+
+.card p{
+    margin-top:15px;
+    font-size:18px;
+}
+
+input{
+    margin-top:15px;
+    padding:8px 15px;
+    border-radius:20px;
+    border:none;
+}
+
+button{
+    margin-top:10px;
+    padding:8px 15px;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+    background:linear-gradient(45deg,#ff9933,#ff0080);
+    color:white;
+}
+
+.controls{
+    position:fixed;
+    bottom:15px;
+    right:15px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:4;
+}
+
+/* Powder Smoke Explosion */
+.smoke{
+    position:absolute;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    pointer-events:none;
+    animation:smokeAnim 2s ease-out forwards;
+    filter:blur(2px);
+}
+
+@keyframes smokeAnim{
+    0%{transform:scale(1);opacity:1;}
+    100%{transform:scale(8) translate(var(--x),var(--y));opacity:0;}
+}
+
+@media(max-width:500px){
+    .card{width:90%;height:380px;}
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+<div class="card" id="card">
+    <h1 id="greeting">Happy Holi 2026 🎨</h1>
+    <p>Celebrate the festival of colors with love, joy & prosperity!</p>
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button onclick="setName()">Personalize</button>
+</div>
+</div>
+
+<div class="controls">
+<button onclick="toggleMusic()">🎵 Music</button>
+<button onclick="toggleMode()">🌙 Mode</button>
+<button onclick="downloadCard()">📸 Download</button>
+<button onclick="gameMode()">🎮 Game</button>
+</div>
+
+<audio id="music" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9d2bde.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* 3D Tilt */
+const card=document.getElementById("card");
+document.addEventListener("mousemove",(e)=>{
+let x=(window.innerWidth/2 - e.pageX)/25;
+let y=(window.innerHeight/2 - e.pageY)/25;
+card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+/* Personalized Name */
+function setName(){
+let name=document.getElementById("nameInput").value;
+if(name!=""){
+document.getElementById("greeting").innerText="Happy Holi 2026, "+name+" 🎨";
+}
+}
+
+/* 3D Powder Smoke Explosion */
+document.addEventListener("click",(e)=>{
+for(let i=0;i<25;i++){
+let smoke=document.createElement("div");
+smoke.className="smoke";
+smoke.style.left=e.clientX+"px";
+smoke.style.top=e.clientY+"px";
+smoke.style.background=`hsl(${Math.random()*360},100%,60%)`;
+smoke.style.setProperty("--x",(Math.random()*200-100)+"px");
+smoke.style.setProperty("--y",(Math.random()*200-100)+"px");
+document.body.appendChild(smoke);
+setTimeout(()=>smoke.remove(),2000);
+}
+});
+
+/* Music */
+let music=document.getElementById("music");
+function toggleMusic(){
+music.paused?music.play():music.pause();
+}
+
+/* Dark Mode */
+function toggleMode(){
+document.body.classList.toggle("dark");
+}
+
+/* Download */
+function downloadCard(){
+html2canvas(card).then(canvas=>{
+let link=document.createElement("a");
+link.download="Holi2026Royal.png";
+link.href=canvas.toDataURL();
+link.click();
+});
+}
+
+let script=document.createElement("script");
+script.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+document.body.appendChild(script);
+
+/* Fireworks */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let particles=[];
+function firework(){
+let x=Math.random()*canvas.width;
+let y=Math.random()*canvas.height/2;
+for(let i=0;i<40;i++){
+particles.push({x,y,angle:Math.random()*2*Math.PI,
+speed:Math.random()*5+2,color:`hsl(${Math.random()*360},100%,60%)`});
+}}
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach((p,i)=>{
+p.x+=Math.cos(p.angle)*p.speed;
+p.y+=Math.sin(p.angle)*p.speed;
+p.speed*=0.96;
+ctx.beginPath();
+ctx.arc(p.x,p.y,2,0,Math.PI*2);
+ctx.fillStyle=p.color;
+ctx.fill();
+if(p.speed<0.5)particles.splice(i,1);
+});
+requestAnimationFrame(animate);
+}
+setInterval(firework,1500);
+animate();
+
+/* Mini Game */
+function gameMode(){
+alert("🎮 Throw colors by clicking anywhere!");
+}
+
+</script>
+
+</body>
+</html>
